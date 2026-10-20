@@ -1,0 +1,10 @@
+# Netlify is the test host. Production will be static hosting on AWS, so the
+# site is built with `nuxt generate` rather than SSR.
+[build]
+  command = "npm run generate"
+  publish = "dist"
+
+[build.environment]
+  # Node 24 ships npm 11. npm 10 can't install this dependency tree.
+  NODE_VERSION = "24"
+  NITRO_PRESET = "netlify_static"

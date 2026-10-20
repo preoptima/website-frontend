@@ -22,6 +22,14 @@ The site needs content to render. In the studio, create a page, then open **Site
 
 Other scripts: `npm run build`, `npm run generate`, `npm run preview`, `npm run lint`, `npm run typecheck`.
 
+## Hosting
+
+The site is fully static (`npm run generate` → `dist/`). It is tested on Netlify (see `netlify.toml`) and will move to static hosting on AWS (S3 + CloudFront) like the other Preoptima projects. Content changes only appear after a rebuild.
+
+- Every page slug in Sanity is fetched at build time and prerendered, so pages don't need to be linked to get built.
+- A page that errors while prerendering fails the build rather than deploying broken.
+- Redirects are written to Netlify's `_redirects`. On AWS they will need re-implementing (e.g. a CloudFront Function), because S3 can't read that file.
+
 ## How it fits together
 
 - `app/queries.ts`: all GROQ queries. Link references are dereferenced here.
@@ -30,7 +38,8 @@ Other scripts: `npm run build`, `npm run generate`, `npm run preview`, `npm run 
 - `app/pages/[...slug].vue`: every other page, looked up by slug.
 - `app/components/PageBuilder.vue`: maps each block `_type` to a component in `app/components/blocks/`.
 - `app/composables/usePageSeo.ts`: page SEO, falling back to the defaults in Site settings.
-- Redirects managed in the CMS are fetched in `nuxt.config.ts` at build time and become Nitro route rules. The site has to be rebuilt to pick up new redirects.
+- Redirects managed in the CMS are fetched in `nuxt.config.ts` at build time and become Nitro route rules.
+- Composables must call other composables before any `await`. After an `await` the Nuxt instance is gone (error `NUXT_E1001`). Only `<script setup>` restores it.
 
 ## Notes
 

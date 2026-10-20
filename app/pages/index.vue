@@ -8,7 +8,7 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Home page not set in Site settings', fatal: true })
 }
 
-await usePageSeo(page)
+usePageSeo(page)
 </script>
 
 <template>

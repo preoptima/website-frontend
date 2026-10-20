@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const settings = await useSiteSettings()
+const { data: settings } = await useSiteSettings()
 
 useSeoMeta({
   titleTemplate: title => (title ? `${title} | ${settings.value?.title}` : settings.value?.title ?? ''),

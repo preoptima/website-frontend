@@ -2,8 +2,9 @@ import type { Ref } from 'vue'
 import type { Page } from '~/types/sanity'
 
 // Applies page-level SEO, falling back to the defaults in Site settings.
-export async function usePageSeo(page: Ref<Page | null | undefined>) {
-  const settings = await useSiteSettings()
+// Must stay synchronous: composables lose the Nuxt instance after an `await`.
+export function usePageSeo(page: Ref<Page | null | undefined>) {
+  const { data: settings } = useSiteSettings()
   const img = useImage()
 
   const seo = computed(() => ({ ...settings.value?.seo, ...stripEmpty(page.value?.seo) }))

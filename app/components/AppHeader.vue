@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const settings = await useSiteSettings()
+const { data: settings } = await useSiteSettings()
 </script>
 
 <template>
