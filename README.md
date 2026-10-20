@@ -28,6 +28,7 @@ The site is fully static (`npm run generate` → `dist/`). It is tested on Netli
 
 - Every page slug in Sanity is fetched at build time and prerendered, so pages don't need to be linked to get built.
 - A page that errors while prerendering fails the build rather than deploying broken.
+- Pages are written as `pacer.html`, not `pacer/index.html`, so URLs have no trailing slash. Netlify serves `/pacer` from `pacer.html` and redirects `/pacer/` to it. On AWS, a CloudFront Function will need to map `/pacer` to `/pacer.html`.
 - Redirects are written to Netlify's `_redirects`. On AWS they will need re-implementing (e.g. a CloudFront Function), because S3 can't read that file.
 
 ## How it fits together

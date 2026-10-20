@@ -99,6 +99,15 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-15',
 
+  nitro: {
+    prerender: {
+      // Write /pacer as pacer.html rather than pacer/index.html, so hosts serve
+      // it at /pacer instead of redirecting to /pacer/. URLs stay slash-free,
+      // matching internal links and canonical URLs.
+      autoSubfolderIndex: false,
+    },
+  },
+
   hooks: {
     async 'nitro:config'(nitroConfig) {
       const pageRoutes = await fetchPageRoutes()
