@@ -69,7 +69,7 @@ const hasExtras = computed(() => items.value.length > 0 || !!props.block.ctas?.l
           :image="media!.image!"
           :alt="media?.alt"
           :style="{ aspectRatio: aspectRatio(media?.aspect) }"
-          sizes="100vw md:50vw xl:600px"
+          sizes="sm:100vw lg:50vw xl:600px"
         />
         <component
           :is="media?.videoUrl ? 'a' : 'div'"
@@ -83,7 +83,7 @@ const hasExtras = computed(() => items.value.length > 0 || !!props.block.ctas?.l
             v-if="hasImage"
             :image="media!.image!"
             class="video__poster"
-            sizes="100vw md:50vw xl:600px"
+            sizes="sm:100vw lg:50vw xl:600px"
           />
           <span class="video__play">
             <svg

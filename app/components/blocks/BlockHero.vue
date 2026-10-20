@@ -97,7 +97,7 @@ const eyebrow = computed(() => props.hero.eyebrow)
             v-if="hasImage"
             :image="media!.image!"
             :alt="media?.alt"
-            sizes="100vw md:50vw xl:600px"
+            sizes="sm:100vw lg:50vw xl:600px"
             loading="eager"
           />
           <Placeholder
@@ -116,7 +116,7 @@ const eyebrow = computed(() => props.hero.eyebrow)
           v-if="hasImage"
           :image="media!.image!"
           :alt="media?.alt"
-          sizes="100vw md:50vw xl:600px"
+          sizes="sm:100vw lg:50vw xl:600px"
           loading="eager"
         />
         <Placeholder

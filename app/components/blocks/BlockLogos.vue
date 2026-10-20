@@ -35,7 +35,7 @@ const partners = computed(() =>
               v-if="partner.logo?.asset"
               :image="partner.logo"
               :alt="partner.name"
-              :sizes="large ? '240px' : '160px'"
+              :sizes="large ? 'sm:240px' : 'sm:160px'"
             />
             <span
               v-else

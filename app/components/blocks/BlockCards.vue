@@ -92,7 +92,7 @@ const showMedia = (card: Card) =>
                 v-if="hasImage(card)"
                 :image="card.media!.image!"
                 :alt="card.media?.alt"
-                :sizes="columns === 2 ? '100vw md:50vw xl:620px' : '100vw md:33vw xl:400px'"
+                :sizes="columns === 2 ? 'sm:100vw lg:50vw xl:620px' : 'sm:100vw md:50vw lg:33vw xl:400px'"
               />
               <Placeholder
                 v-else-if="showMedia(card)"
@@ -136,7 +136,7 @@ const showMedia = (card: Card) =>
                   v-if="hasImage(card)"
                   :image="card.media!.image!"
                   :alt="card.media?.alt"
-                  sizes="100vw md:33vw xl:400px"
+                  sizes="sm:100vw md:50vw lg:33vw xl:400px"
                 />
                 <Placeholder
                   v-else
