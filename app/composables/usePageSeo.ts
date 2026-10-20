@@ -6,6 +6,8 @@ import type { Page } from '~/types/sanity'
 export function usePageSeo(page: Ref<Page | null | undefined>) {
   const { data: settings } = useSiteSettings()
   const img = useImage()
+  const { siteUrl } = useRuntimeConfig().public
+  const canonical = computed(() => new URL(page.value?.isHome ? '/' : `/${page.value?.slug ?? ''}`, siteUrl).href)
 
   const seo = computed(() => ({ ...settings.value?.seo, ...stripEmpty(page.value?.seo) }))
   const imageRef = computed(() => seo.value.image?.asset?._ref)
@@ -16,7 +18,11 @@ export function usePageSeo(page: Ref<Page | null | undefined>) {
     ogTitle: () => seo.value.title || page.value?.title,
     ogDescription: () => seo.value.description,
     ogImage: () => (imageRef.value ? img(imageRef.value, {}, { preset: 'ogImage' }) : undefined),
+    ogUrl: () => canonical.value,
     robots: () => (seo.value.noIndex ? 'noindex, nofollow' : undefined),
+  })
+  useHead({
+    link: [{ rel: 'canonical', href: canonical }],
   })
 }
 

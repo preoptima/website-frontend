@@ -15,6 +15,7 @@ const pageFields = /* groq */ `
   _id,
   title,
   "slug": slug.current,
+  "isHome": _id == *[_type == "siteSettings"][0].homePage._ref,
   seo,
   content[]{
     ...,

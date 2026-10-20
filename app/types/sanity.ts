@@ -54,6 +54,7 @@ export interface Page {
   _id: string
   title: string
   slug: string
+  isHome: boolean
   seo?: Seo
   content?: PageBuilderBlock[]
 }

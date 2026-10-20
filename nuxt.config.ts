@@ -41,14 +41,26 @@ async function fetchRedirectRouteRules() {
 }
 
 // Every page is prerendered, not just the ones the crawler can reach from `/`.
+// The home page is served at `/` only; its own slug redirects there so it isn't
+// published twice.
 async function fetchPageRoutes() {
   try {
-    const slugs = await fetchFromSanity<string[]>(`*[_type == "page" && defined(slug.current)].slug.current`)
-    return slugs.map(slug => `/${slug}`)
+    const pages = await fetchFromSanity<{ slug: string, isHome: boolean }[]>(
+      `*[_type == "page" && defined(slug.current)]{
+        "slug": slug.current,
+        "isHome": _id == *[_type == "siteSettings"][0].homePage._ref
+      }`,
+    )
+    return {
+      prerender: pages.filter(page => !page.isHome).map(page => `/${page.slug}`),
+      routeRules: Object.fromEntries(
+        pages.filter(page => page.isHome).map(page => [`/${page.slug}`, { redirect: { to: '/', statusCode: 301 as const } }]),
+      ),
+    }
   }
   catch (error) {
     console.warn('[prerender] Could not fetch page slugs from Sanity, relying on the crawler:', error)
-    return []
+    return { prerender: [], routeRules: {} }
   }
 }
 
@@ -59,7 +71,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+      // Netlify sets URL to the site's primary address at build time.
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || process.env.URL || 'http://localhost:3000',
     },
   },
 
@@ -84,14 +97,16 @@ export default defineNuxtConfig({
 
   hooks: {
     async 'nitro:config'(nitroConfig) {
+      const pageRoutes = await fetchPageRoutes()
       nitroConfig.routeRules = {
         ...nitroConfig.routeRules,
+        ...pageRoutes.routeRules,
         ...(await fetchRedirectRouteRules()),
       }
       nitroConfig.prerender ||= {}
       nitroConfig.prerender.routes = [
         ...(nitroConfig.prerender.routes ?? []),
-        ...(await fetchPageRoutes()),
+        ...pageRoutes.prerender,
       ]
     },
   },
