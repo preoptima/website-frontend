@@ -12,5 +12,8 @@ usePageSeo(page)
 </script>
 
 <template>
-  <PageBuilder :blocks="page?.content" />
+  <PageView
+    v-if="page"
+    :page="page"
+  />
 </template>

@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import type { SanityImage } from '~/types/sanity'
 
-defineProps<{ image: SanityImage, sizes?: string }>()
+withDefaults(defineProps<{
+  image: SanityImage
+  alt?: string
+  sizes?: string
+  loading?: 'lazy' | 'eager'
+}>(), { loading: 'lazy' })
 </script>
 
 <template>
@@ -9,10 +14,10 @@ defineProps<{ image: SanityImage, sizes?: string }>()
     v-if="image.asset?._ref"
     provider="sanity"
     :src="image.asset._ref"
-    :alt="image.alt ?? ''"
+    :alt="alt ?? ''"
     :sizes="sizes"
     :modifiers="{ crop: image.crop, hotspot: image.hotspot }"
     format="webp"
-    class="w-100 h-auto"
+    :loading="loading"
   />
 </template>

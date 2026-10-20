@@ -3,23 +3,36 @@ import type { NuxtError } from '#app'
 
 const props = defineProps<{ error: NuxtError }>()
 
-useSeoMeta({ title: props.error.statusCode === 404 ? 'Page not found' : 'Something went wrong' })
+const notFound = computed(() => props.error.statusCode === 404)
+
+useSeoMeta({ title: () => (notFound.value ? 'Page not found' : 'Something went wrong') })
 </script>
 
 <template>
-  <v-app>
-    <v-main>
-      <v-container class="py-16 text-center">
-        <h1 class="text-display-small mb-4">
-          {{ error.statusCode === 404 ? 'Page not found' : 'Something went wrong' }}
-        </h1>
-        <v-btn
-          color="primary"
-          @click="clearError({ redirect: '/' })"
-        >
-          Back to home
-        </v-btn>
-      </v-container>
-    </v-main>
-  </v-app>
+  <SiteHeader />
+  <main class="section tone--default">
+    <div class="section__inner error">
+      <span class="eyebrow">{{ error.statusCode }}</span>
+      <h1 class="h2">
+        {{ notFound ? 'We couldn’t find that page.' : 'Something went wrong.' }}
+      </h1>
+      <p class="intro">
+        {{ notFound ? 'It may have moved, or the link may be out of date.' : 'Please try again in a moment.' }}
+      </p>
+      <div class="buttons">
+        <ButtonCta :cta="{ label: 'Back to Home', link: { type: 'internal', page: { isHome: true } } }" />
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
 </template>
+
+<style scoped>
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  min-height: 50vh;
+}
+</style>

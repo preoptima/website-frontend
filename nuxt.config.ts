@@ -1,9 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import { createResolver } from '@nuxt/kit'
-
-const { resolve } = createResolver(import.meta.url)
-
 const sanityProjectId = process.env.NUXT_PUBLIC_SANITY_PROJECT_ID || 'zfe5m87l'
 const sanityDataset = process.env.NUXT_PUBLIC_SANITY_DATASET || 'production'
 
@@ -68,33 +63,41 @@ async function fetchPageRoutes() {
 export default defineNuxtConfig({
 
   modules: ['@nuxtjs/sanity', '@nuxt/image', '@nuxt/eslint'],
+
+  // Register components by file name only: blocks/BlockHero.vue is <BlockHero>,
+  // ui/ButtonCta.vue is <ButtonCta>.
+  components: [{ path: '~/components', pathPrefix: false }],
   devtools: { enabled: true },
+
+  app: {
+    head: {
+      htmlAttrs: { lang: 'en-GB' },
+      link: [
+        { rel: 'icon', href: '/favicon.ico' },
+        // The weights used above the fold: body, headings, nav and buttons.
+        ...[400, 500, 600, 700].map(weight => ({
+          rel: 'preload' as const,
+          href: `/fonts/manrope-${weight}.woff2`,
+          as: 'font' as const,
+          type: 'font/woff2',
+          crossorigin: '' as const,
+        })),
+      ],
+    },
+  },
+
+  css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
     public: {
       // Netlify sets URL to the site's primary address at build time.
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || process.env.URL || 'http://localhost:3000',
+      // Dashed slots where an editor hasn't added an image yet. On for the
+      // test host only; production hides the slot instead.
+      showPlaceholders: process.env.NUXT_PUBLIC_SHOW_PLACEHOLDERS === 'true',
     },
-  },
-
-  build: {
-    transpile: ['vuetify'],
   },
   compatibilityDate: '2025-07-15',
-
-  vite: {
-    vue: {
-      template: {
-        transformAssetUrls,
-      },
-    },
-    plugins: [
-      vuetify({
-        autoImport: true,
-        styles: { configFile: resolve('./app/assets/styles/settings.scss') },
-      }),
-    ],
-  },
 
   hooks: {
     async 'nitro:config'(nitroConfig) {

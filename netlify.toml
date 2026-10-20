@@ -8,3 +8,5 @@
   # Node 24 ships npm 11. npm 10 can't install this dependency tree.
   NODE_VERSION = "24"
   NITRO_PRESET = "netlify_static"
+  # Netlify is the test host, so show placeholders where images are missing.
+  NUXT_PUBLIC_SHOW_PLACEHOLDERS = "true"

@@ -1,0 +1,74 @@
+/*
+ * Design tokens from the Preoptima design system
+ * (designs/design_handoff_preoptima_website/design/_ds/…/tokens). Only the
+ * tokens the website uses are copied; keep names in step with the source.
+ */
+
+@font-face { font-family: Manrope; src: url('/fonts/manrope-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: Manrope; src: url('/fonts/manrope-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: Manrope; src: url('/fonts/manrope-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: Manrope; src: url('/fonts/manrope-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: Manrope; src: url('/fonts/manrope-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+
+:root {
+  /* Primary */
+  --mirage: #16232A;
+  --deep-sea-green: #075056;
+  --blaze-orange: #FF5B04;
+  --wild-sand: #E4EEF0;
+  --light-gray: #F7F7F7;
+  --white: #FFFFFF;
+  --tint-1: #E7EFF6;
+
+  /* Extended palette */
+  --soft-blush: #F7DAD9;
+  --night-bordeaux: #550C18;
+  --honeydew: #CFE5D8;
+  --jungle-teal: #478978;
+  --dark-teal: #004043;
+  --orange-hover: #E65203;
+
+  /* Neutrals */
+  --rule: #AEAEAE;
+  --rule-light: #D9D7D7;
+  --text-muted-ui: #7A8A8D;
+  --text-secondary-ui: #4A5556;
+  --error: #B42318;
+
+  /* Colour families. Masterbrand by default; [data-family] remaps them. */
+  --family-surface: var(--wild-sand);
+  --family-ground: var(--deep-sea-green);
+  --family-accent: var(--blaze-orange);
+
+  /* Type */
+  --font-sans: Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Layout */
+  --content-width: 1280px;
+  --gutter: clamp(20px, 5vw, 48px);
+  --gutter-header: clamp(20px, 4vw, 32px);
+  --section-padding: clamp(64px, 9vw, 112px);
+  --section-padding-compact: clamp(40px, 6vw, 64px);
+  --hero-padding: clamp(56px, 8vw, 96px);
+  --heading-gap: clamp(32px, 5vw, 56px);
+  --split-gap: clamp(32px, 6vw, 64px);
+
+  /* Surfaces */
+  --shadow-card: inset 0 0 0 1px var(--wild-sand), 0 4px 16px rgba(15, 23, 42, 0.03);
+  --shadow-window: 0 12px 32px rgba(15, 23, 42, 0.14);
+  --shadow-dropdown: inset 0 0 0 1px var(--wild-sand), 0 12px 32px rgba(15, 23, 42, 0.10);
+  --radius-control: 8px;
+  --transition-colour: 150ms ease;
+}
+
+[data-family='pacer'] {
+  --family-surface: var(--soft-blush);
+  --family-ground: var(--night-bordeaux);
+  --family-accent: var(--blaze-orange);
+}
+
+[data-family='concept'] {
+  --family-surface: var(--honeydew);
+  --family-ground: var(--deep-sea-green);
+  --family-accent: var(--jungle-teal);
+}

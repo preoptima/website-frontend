@@ -1,0 +1,73 @@
+@import './tokens.css';
+@import './tones.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--light-gray);
+  color: var(--mirage);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, p, ul, ol, figure, blockquote {
+  margin: 0;
+}
+
+ul, ol {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  color: var(--deep-sea-green);
+  text-decoration: none;
+  transition: color var(--transition-colour);
+}
+
+a:hover {
+  color: var(--blaze-orange);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blaze-orange);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Centred 1280px column with the fluid side gutter. */
+.container {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}

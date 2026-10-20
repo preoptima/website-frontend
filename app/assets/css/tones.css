@@ -1,0 +1,141 @@
+/*
+ * Block tones (README "Tones"). A block picks its background with `tone`; the
+ * text and accent colours follow from these variables and the page family.
+ */
+
+.tone--default,
+.tone--white,
+.tone--surface {
+  --tone-ink: var(--mirage);
+  --tone-muted: var(--text-secondary-ui);
+  --tone-label: var(--family-ground);
+  --tone-highlight: var(--family-ground);
+  --tone-number: var(--blaze-orange);
+  --tone-rule: var(--rule-light);
+  --tone-rule-strong: var(--rule);
+  --tone-badge-bg: var(--family-ground);
+  --tone-badge-ink: var(--white);
+  --tone-chip: var(--white);
+  --tone-placeholder: var(--family-surface);
+  --tone-fill: var(--white);
+  --tone-tile-frame: var(--wild-sand);
+}
+
+.tone--default {
+  --tone-bg: var(--light-gray);
+}
+
+.tone--white {
+  --tone-bg: var(--white);
+  --tone-edge: 1px solid var(--wild-sand);
+  --tone-chip: var(--light-gray);
+  --tone-fill: var(--light-gray);
+}
+
+.tone--surface {
+  --tone-bg: var(--family-surface);
+  --tone-muted: var(--mirage);
+  --tone-number: var(--family-ground);
+  --tone-rule: rgba(22, 35, 42, 0.15);
+  --tone-rule-strong: rgba(22, 35, 42, 0.3);
+  --tone-chip: rgba(255, 255, 255, 0.6);
+  --tone-placeholder: rgba(255, 255, 255, 0.5);
+  --tone-tile-frame: rgba(22, 35, 42, 0.12);
+}
+
+.tone--ground,
+.tone--brand,
+.tone--dark {
+  --tone-ink: var(--white);
+  --tone-highlight: var(--blaze-orange);
+  --tone-number: var(--blaze-orange);
+  --tone-rule: rgba(255, 255, 255, 0.15);
+  --tone-rule-strong: rgba(255, 255, 255, 0.3);
+  --tone-chip: rgba(255, 255, 255, 0.08);
+  --tone-placeholder: rgba(255, 255, 255, 0.06);
+  --tone-fill: var(--white);
+  --tone-tile-frame: rgba(255, 255, 255, 0.15);
+}
+
+.tone--ground {
+  --tone-bg: var(--family-ground);
+  --tone-muted: var(--family-surface);
+  --tone-label: var(--family-surface);
+  --tone-badge-bg: var(--white);
+  --tone-badge-ink: var(--family-ground);
+}
+
+.tone--brand {
+  --tone-bg: var(--deep-sea-green);
+  --tone-muted: var(--wild-sand);
+  --tone-label: var(--honeydew);
+  --tone-badge-bg: var(--white);
+  --tone-badge-ink: var(--deep-sea-green);
+}
+
+.tone--dark {
+  --tone-bg: var(--mirage);
+  --tone-muted: var(--wild-sand);
+  --tone-label: var(--wild-sand);
+}
+
+/* A full-width block section on its tone, with the content column inside. */
+.section {
+  background: var(--tone-bg);
+  color: var(--tone-ink);
+  border-top: var(--tone-edge, 0);
+  border-bottom: var(--tone-edge, 0);
+}
+
+.section__inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--section-padding) var(--gutter);
+}
+
+.section__inner--compact {
+  padding-block: var(--section-padding-compact);
+}
+
+/* Shared type roles. */
+.h2 {
+  font-size: clamp(32px, 3.6vw, 48px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.intro {
+  color: var(--tone-muted);
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.eyebrow {
+  color: var(--tone-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.badge {
+  align-self: flex-start;
+  padding: 4px 8px;
+  border-radius: var(--radius-control);
+  background: var(--tone-badge-bg);
+  color: var(--tone-badge-ink);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}

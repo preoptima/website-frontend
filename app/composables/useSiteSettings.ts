@@ -1,9 +1,12 @@
 import { siteSettingsQuery } from '~/queries'
 import type { SiteSettings } from '~/types/sanity'
 
-// Shared across app.vue, header, footer and page SEO; the fixed key dedupes the
-// request. Returns the AsyncData so components can `await` it but composables
-// don't have to.
+// Site settings, navigation and footer in one request, shared by app.vue, the
+// header, footer and page SEO. Plain useAsyncData rather than useSanityQuery:
+// calls with the same key share one data ref, so components that don't await
+// still read the payload during hydration (useSanityQuery hands each caller a
+// fresh ref that stays empty until its promise resolves).
 export function useSiteSettings() {
-  return useSanityQuery<SiteSettings>(siteSettingsQuery, {}, { key: 'site-settings' })
+  const sanity = useSanity()
+  return useAsyncData('site-settings', () => sanity.fetch<SiteSettings>(siteSettingsQuery))
 }

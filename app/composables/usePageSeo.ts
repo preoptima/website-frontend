@@ -9,7 +9,7 @@ export function usePageSeo(page: Ref<Page | null | undefined>) {
   const { siteUrl } = useRuntimeConfig().public
   const canonical = computed(() => new URL(page.value?.isHome ? '/' : `/${page.value?.slug ?? ''}`, siteUrl).href)
 
-  const seo = computed(() => ({ ...settings.value?.seo, ...stripEmpty(page.value?.seo) }))
+  const seo = computed(() => ({ ...settings.value?.settings?.seo, ...stripEmpty(page.value?.seo) }))
   const imageRef = computed(() => seo.value.image?.asset?._ref)
 
   useSeoMeta({

@@ -3,10 +3,13 @@ import { pageBySlugQuery } from '~/queries'
 import type { Page } from '~/types/sanity'
 
 // Remount on navigation between slugs so the query re-runs with a fresh key.
-definePageMeta({ key: route => route.fullPath })
+// The path, not fullPath, so in-page anchor links don't remount the page.
+definePageMeta({ key: route => route.path })
 
 const route = useRoute()
-const slug = [route.params.slug].flat().join('/')
+// Static hosts redirect /pacer to /pacer/, so ignore empty segments from a
+// trailing slash. Otherwise the slug wouldn't match the prerendered payload.
+const slug = [route.params.slug].flat().filter(Boolean).join('/')
 
 const { data: page } = await useSanityQuery<Page>(pageBySlugQuery, { slug })
 
@@ -22,5 +25,8 @@ usePageSeo(page)
 </script>
 
 <template>
-  <PageBuilder :blocks="page?.content" />
+  <PageView
+    v-if="page"
+    :page="page"
+  />
 </template>

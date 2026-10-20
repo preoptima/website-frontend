@@ -1,34 +1,61 @@
-// Shared GROQ fragments. Links are dereferenced here so components never have
-// to resolve references themselves.
-const linkFields = /* groq */ `
-  _key,
-  label,
+// GROQ queries. References are expanded here so components receive flat props
+// shaped like the design handoff's fixtures.
+
+const isHome = /* groq */ `_id == *[_type == "siteSettings"][0].homePage._ref`
+
+const link = /* groq */ `{
   type,
-  external,
-  internal->{
-    "slug": slug.current,
-    "isHome": _id == *[_type == "siteSettings"][0].homePage._ref
-  }
-`
+  url,
+  anchor,
+  "page": internal->{ "slug": slug.current, "isHome": ${isHome} }
+}`
+
+const labelledLink = /* groq */ `{ _key, label, "link": link${link} }`
+
+const cta = /* groq */ `{ _key, label, style, "link": link${link} }`
 
 const pageFields = /* groq */ `
   _id,
   title,
   "slug": slug.current,
-  "isHome": _id == *[_type == "siteSettings"][0].homePage._ref,
+  "isHome": ${isHome},
+  theme,
+  navSection,
   seo,
-  content[]{
+  hero{
     ...,
-    _type == "hero" => { links[]{ ${linkFields} } },
-    _type == "callToAction" => { link{ ${linkFields} } },
+    ctas[]${cta}
+  },
+  "blocks": blocks[hidden != true]{
+    ...,
+    ctas[]${cta},
+    _type == "cardGridBlock" => { cards[]{ ..., "link": link${labelledLink} } },
+    _type == "logoStripBlock" => { "partners": partners[]->{ _id, name, logo, url } },
   }
 `
 
-export const siteSettingsQuery = /* groq */ `*[_type == "siteSettings"][0]{
-  title,
-  seo,
-  mainNavigation[]{ ${linkFields} },
-  footerNavigation[]{ ${linkFields} },
+export const siteSettingsQuery = /* groq */ `{
+  "settings": *[_type == "siteSettings"][0]{ title, seo },
+  "navigation": *[_id == "navigation"][0]{
+    groups[]{
+      _key,
+      label,
+      accent,
+      section,
+      "link": link${link},
+      items[]{ _key, label, description, badge, "link": link${link} }
+    },
+    links[]{ _key, label, section, "link": link${link} },
+    "signIn": signIn${labelledLink},
+    "cta": cta${cta}
+  },
+  "footer": *[_id == "footer"][0]{
+    tagline,
+    legal,
+    strapline,
+    columns[]{ _key, heading, links[]${labelledLink} },
+    social
+  }
 }`
 
 export const homePageQuery = /* groq */ `*[_type == "siteSettings"][0].homePage->{ ${pageFields} }`
