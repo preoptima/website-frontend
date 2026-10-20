@@ -21,7 +21,8 @@ async function fetchFromSanity<T>(query: string): Promise<T> {
 }
 
 // Editor-managed redirects become Nitro routeRules, which the Netlify preset
-// writes to `_redirects`.
+// writes to `_redirects`. Redirect sources are never prerendered: Netlify serves
+// a file at a path in preference to a `_redirects` rule for it.
 async function fetchRedirectRouteRules() {
   try {
     const redirects = await fetchFromSanity<{ source: string, destination: string, permanent?: boolean }[]>(
@@ -30,7 +31,7 @@ async function fetchRedirectRouteRules() {
     return Object.fromEntries(
       redirects.map(({ source, destination, permanent }) => [
         source,
-        { redirect: { to: destination, statusCode: permanent === false ? 302 as const : 301 as const } },
+        { redirect: { to: destination, statusCode: permanent === false ? 302 as const : 301 as const }, prerender: false },
       ]),
     )
   }
@@ -54,7 +55,7 @@ async function fetchPageRoutes() {
     return {
       prerender: pages.filter(page => !page.isHome).map(page => `/${page.slug}`),
       routeRules: Object.fromEntries(
-        pages.filter(page => page.isHome).map(page => [`/${page.slug}`, { redirect: { to: '/', statusCode: 301 as const } }]),
+        pages.filter(page => page.isHome).map(page => [`/${page.slug}`, { redirect: { to: '/', statusCode: 301 as const }, prerender: false }]),
       ),
     }
   }
