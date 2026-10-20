@@ -88,7 +88,10 @@ const eyebrow = computed(() => props.hero.eyebrow)
         v-if="mediaKind === 'screen'"
         class="screen"
       >
-        <div class="screen__bar">
+        <div
+          v-if="media?.product || media?.caption"
+          class="screen__bar"
+        >
           <span class="screen__product">{{ media?.product }}</span>
           <span class="screen__caption">{{ media?.caption }}</span>
         </div>
