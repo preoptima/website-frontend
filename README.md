@@ -1,6 +1,6 @@
 # Preoptima Frontend
 
-Nuxt 4 marketing site for Preoptima. Content comes from Sanity; the studio lives in the sibling [`cms`](../cms) repo.
+Nuxt 4 marketing site for Preoptima. Content comes from Sanity; the studio lives in the sibling [`website-cms`](https://github.com/preoptima/website-cms) repo.
 
 ## Stack
 
