@@ -233,7 +233,6 @@ const eyebrow = computed(() => props.hero.eyebrow)
   min-width: 0;
   overflow: hidden;
   border-radius: 16px;
-  background: var(--white);
   box-shadow: var(--shadow-window);
 }
 
@@ -262,9 +261,14 @@ const eyebrow = computed(() => props.hero.eyebrow)
   text-overflow: ellipsis;
 }
 
+/* Only the placeholder gets a background. Behind an image, a light background
+   shows through the anti-aliased rounded corners as a pale outline. */
 .screen__body {
   position: relative;
   aspect-ratio: 16 / 10;
+}
+
+.screen__body:has(.screen__placeholder) {
   background: var(--light-gray);
 }
 

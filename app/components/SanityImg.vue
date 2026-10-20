@@ -14,17 +14,26 @@ const props = withDefaults(defineProps<{
 // The editor's crop is applied by the image CDN. Images are only sized by
 // width, so frames crop them with `object-fit: cover`; aim that crop at the
 // hotspot. Hotspot coordinates are relative to the uncropped image, so map
-// them into the cropped one. With object-position at the hotspot's own
-// percentage, the hotspot stays in frame at every aspect ratio.
+// them into the cropped one.
+//
+// On each axis, object-position p shows the window starting at p × (1 − v),
+// where v is the visible fraction. Setting p = start / (1 − size) for the
+// hotspot box keeps the whole box in view whenever the frame is big enough
+// to hold it, at any aspect ratio: a box touching the top edge gives 0%.
 const objectPosition = computed(() => {
   const { hotspot, crop } = props.image
   if (!hotspot) return undefined
-  const left = crop?.left ?? 0
-  const top = crop?.top ?? 0
-  const width = 1 - left - (crop?.right ?? 0)
-  const height = 1 - top - (crop?.bottom ?? 0)
-  const percent = (value: number) => `${(Math.min(Math.max(value, 0), 1) * 100).toFixed(1)}%`
-  return `${percent((hotspot.x - left) / width)} ${percent((hotspot.y - top) / height)}`
+  const axis = (centre: number, size: number, cropStart = 0, cropEnd = 0) => {
+    const span = 1 - cropStart - cropEnd
+    const box = Math.min(size / span, 1)
+    const start = (centre - cropStart) / span - box / 2
+    const position = box < 1 ? start / (1 - box) : 0.5
+    return `${(Math.min(Math.max(position, 0), 1) * 100).toFixed(1)}%`
+  }
+  return [
+    axis(hotspot.x, hotspot.width, crop?.left, crop?.right),
+    axis(hotspot.y, hotspot.height, crop?.top, crop?.bottom),
+  ].join(' ')
 })
 </script>
 
