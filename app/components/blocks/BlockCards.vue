@@ -276,6 +276,15 @@ const showMedia = (card: Card) =>
   background: var(--family-surface);
 }
 
+/* Product cards take their product's tint. The Wild Sand hairline would read
+   as a pale outline on the tint, so only the soft shadow stays. */
+.card--feature.card--family {
+  --card-rule: rgba(22, 35, 42, 0.15);
+
+  background: var(--family-surface);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+}
+
 .card__content {
   display: flex;
   flex: 1;
@@ -382,7 +391,7 @@ const showMedia = (card: Card) =>
   display: flex;
   margin-top: 12px;
   padding-top: 24px;
-  border-top: 1px solid var(--wild-sand);
+  border-top: 1px solid var(--card-rule, var(--wild-sand));
 }
 
 .card__link {
