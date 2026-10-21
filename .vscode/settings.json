@@ -1,0 +1,21 @@
+{
+  // Formatting comes from ESLint Stylistic (`@nuxt/eslint`) for JS, TS and
+  // templates, and Stylelint Stylistic for CSS (`stylelint.config.mjs`). Not
+  // Prettier.
+  "prettier.enable": false,
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "eslint.useFlatConfig": true,
+  "[javascript][typescript][vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  // Stylelint isn't a formatter in VS Code, so CSS is fixed through a code
+  // action on save instead. This also covers `<style>` blocks in Vue files.
+  "stylelint.validate": ["css", "vue"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": "explicit"
+  },
+  "[css]": {
+    "editor.formatOnSave": false
+  }
+}

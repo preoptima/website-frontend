@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint .",
+    "lint": "eslint . && stylelint \"app/**/*.{css,vue}\"",
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
@@ -22,8 +22,12 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
+    "@stylistic/stylelint-config": "^5.0.0",
     "@types/node": "^26.6.5",
     "eslint": "^10.13.0",
+    "postcss-html": "^2.0.0",
+    "stylelint": "^17.16.0",
+    "stylelint-config-html": "^2.0.0",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.3.13"
   }

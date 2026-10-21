@@ -1,0 +1,4 @@
+{
+  "recommendations": ["dbaeumer.vscode-eslint", "stylelint.vscode-stylelint", "vue.volar"],
+  "unwantedRecommendations": ["esbenp.prettier-vscode"]
+}
