@@ -52,6 +52,7 @@ export interface Seo {
 }
 
 export interface Hero {
+  layout?: 'split' | 'stacked'
   tone?: Tone
   eyebrow?: { product?: string, tagline?: string, badge?: string }
   heading?: HeadingText
@@ -63,6 +64,7 @@ export interface Hero {
     alt?: string
     product?: string
     caption?: string
+    frameColor?: 'nightBordeaux' | 'deepSea' | 'mirage'
     label?: string
   }
   points?: string[]

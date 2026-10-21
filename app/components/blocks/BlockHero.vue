@@ -11,12 +11,26 @@ const mediaKind = computed(() => {
   return kind !== 'none' && (hasImage.value || showPlaceholders) ? kind : 'none'
 })
 const eyebrow = computed(() => props.hero.eyebrow)
+
+// The stacked layout puts the text above a wide screenshot window. It only
+// applies to a product screen; anything else falls back to the split layout.
+const stacked = computed(() => props.hero.layout === 'stacked' && mediaKind.value === 'screen')
+const frameColours = {
+  nightBordeaux: 'var(--night-bordeaux)',
+  deepSea: 'var(--deep-sea-green)',
+  mirage: 'var(--mirage)',
+}
+const frameColour = computed(() => frameColours[media.value?.frameColor ?? 'nightBordeaux'])
+const windowStyle = computed(() => ({
+  '--window-bar': frameColour.value,
+  '--image-aspect': imageAspect(media.value?.image),
+}))
 </script>
 
 <template>
   <section
     class="hero section"
-    :class="`tone--${hero.tone ?? 'surface'}`"
+    :class="[`tone--${hero.tone ?? 'surface'}`, { 'hero--stacked': stacked }]"
   >
     <div class="hero__inner">
       <div class="hero__text">
@@ -48,26 +62,31 @@ const eyebrow = computed(() => props.hero.eyebrow)
         />
 
         <div
-          v-if="hero.body?.length"
-          class="hero__body"
+          v-if="hero.body?.length || hero.ctas?.length"
+          class="hero__side"
         >
-          <p
-            v-for="(paragraph, index) in hero.body"
-            :key="index"
+          <div
+            v-if="hero.body?.length"
+            class="hero__body"
           >
-            {{ paragraph }}
-          </p>
-        </div>
+            <p
+              v-for="(paragraph, index) in hero.body"
+              :key="index"
+            >
+              {{ paragraph }}
+            </p>
+          </div>
 
-        <div
-          v-if="hero.ctas?.length"
-          class="buttons hero__buttons"
-        >
-          <ButtonCta
-            v-for="cta in hero.ctas"
-            :key="cta._key"
-            :cta="cta"
-          />
+          <div
+            v-if="hero.ctas?.length"
+            class="buttons hero__buttons"
+          >
+            <ButtonCta
+              v-for="cta in hero.ctas"
+              :key="cta._key"
+              :cta="cta"
+            />
+          </div>
         </div>
 
         <ol
@@ -85,7 +104,31 @@ const eyebrow = computed(() => props.hero.eyebrow)
       </div>
 
       <div
-        v-if="mediaKind === 'screen'"
+        v-if="stacked"
+        class="window"
+        :style="windowStyle"
+      >
+        <div class="window__bar">
+          <span /><span /><span />
+        </div>
+        <div class="window__viewport">
+          <SanityImg
+            v-if="hasImage"
+            :image="media!.image!"
+            :alt="media?.alt"
+            sizes="sm:100vw lg:960px"
+            loading="eager"
+          />
+          <Placeholder
+            v-else
+            class="window__placeholder"
+            :label="media?.label"
+          />
+        </div>
+      </div>
+
+      <div
+        v-else-if="mediaKind === 'screen'"
         class="screen"
       >
         <div
@@ -198,6 +241,13 @@ const eyebrow = computed(() => props.hero.eyebrow)
   text-wrap: pretty;
 }
 
+.hero__side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
 .hero__buttons {
   margin-top: 8px;
 }
@@ -286,6 +336,94 @@ const eyebrow = computed(() => props.hero.eyebrow)
   inset: 16px;
   width: auto;
   height: auto;
+}
+
+/* Stacked layout: eyebrow, then the heading beside the body and buttons, then
+   a wide screenshot window cut off flat by the section's bottom edge. */
+.hero--stacked {
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+}
+
+.hero--stacked .hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 0;
+  container-type: inline-size;
+}
+
+.hero--stacked .hero__text {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  align-items: end;
+  gap: 24px 64px;
+}
+
+.hero--stacked .hero__eyebrow,
+.hero--stacked .hero__points {
+  grid-column: 1 / -1;
+}
+
+/* Smaller than the split heading so the two columns balance. */
+.hero--stacked .hero__heading {
+  font-size: clamp(36px, 4vw, 48px);
+}
+
+/* Sits the buttons' baseline on the heading's last line. */
+.hero--stacked .hero__side {
+  padding-bottom: 6px;
+}
+
+.hero--stacked .hero__buttons {
+  margin-top: 0;
+}
+
+.window {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  height: clamp(240px, 36vw, 460px);
+  /* Never taller than the title bar plus the whole screenshot, so a narrow
+     window doesn't show white space below it. */
+  max-height: calc(32px + min(100cqw, 960px) * var(--image-aspect, 100));
+  margin: clamp(16px, 4vw, 40px) auto 0;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+  background: var(--white);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.28);
+}
+
+.window__bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  background: var(--window-bar);
+}
+
+.window__bar span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* The screenshot keeps its natural height, anchored top-left; the window's
+   fixed height crops the bottom. */
+.window__viewport img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.window .window__placeholder {
+  position: absolute;
+  inset: 48px 16px 0;
+  width: auto;
+  height: auto;
+  border-bottom: 0;
 }
 
 .photo {
