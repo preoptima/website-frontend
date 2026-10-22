@@ -118,6 +118,7 @@ const windowStyle = computed(() => ({
             :alt="media?.alt"
             sizes="sm:100vw lg:960px"
             loading="eager"
+            fetchpriority="high"
           />
           <Placeholder
             v-else
@@ -145,6 +146,7 @@ const windowStyle = computed(() => ({
             :alt="media?.alt"
             sizes="sm:100vw lg:50vw xl:600px"
             loading="eager"
+            fetchpriority="high"
           />
           <Placeholder
             v-else
@@ -164,6 +166,7 @@ const windowStyle = computed(() => ({
           :alt="media?.alt"
           sizes="sm:100vw lg:50vw xl:600px"
           loading="eager"
+          fetchpriority="high"
         />
         <Placeholder
           v-else

@@ -10,6 +10,9 @@ const style = computed(() => props.block.cardStyle ?? 'outline')
 const columns = computed(() => props.block.columns ?? 3)
 const linkAsButton = computed(() => props.block.linkStyle === 'button')
 const hasHeader = computed(() => props.block.heading?.text || props.block.intro)
+// Card titles sit under the block's heading; without one they're the
+// section's top-level headings.
+const titleTag = computed(() => (props.block.heading?.text ? 'h3' : 'h2'))
 
 const hasImage = (card: Card) => !!card.media?.image?.asset
 const showMedia = (card: Card) =>
@@ -67,9 +70,12 @@ const showMedia = (card: Card) =>
                 <path d="M8.667 1.333 2 9.333h6l-.667 5.334L14 6.667H8l.667-5.334Z" />
               </svg>
             </span>
-            <h3 class="value-card__title">
+            <component
+              :is="titleTag"
+              class="value-card__title"
+            >
               {{ card.title }}
-            </h3>
+            </component>
             <p class="value-card__body">
               {{ card.body }}
             </p>
@@ -109,13 +115,14 @@ const showMedia = (card: Card) =>
                 v-if="card.eyebrow"
                 class="card__eyebrow"
               >{{ card.eyebrow }}</span>
-              <h3
+              <component
+                :is="titleTag"
                 v-if="card.title && style !== 'tiles'"
                 class="card__title"
                 :class="{ 'card__title--large': style === 'feature' && card.subtitle }"
               >
                 {{ card.title }}
-              </h3>
+              </component>
               <p
                 v-if="card.subtitle"
                 class="card__subtitle"
