@@ -137,7 +137,16 @@ export interface CtaBlock extends BlockBase {
   ctas?: Cta[]
 }
 
-export type PageBlock = SplitBlock | CardGridBlock | LogoStripBlock | CtaBlock
+export interface StepsBlock extends BlockBase {
+  _type: 'stepsBlock'
+  layout?: 'sequence' | 'stacked'
+  tone?: 'default' | 'white' | 'ground' | 'brand'
+  heading: string
+  body?: string[]
+  steps?: { _key: string, label?: string, title: string, body?: string }[]
+}
+
+export type PageBlock = SplitBlock | CardGridBlock | StepsBlock | LogoStripBlock | CtaBlock
 
 export interface Page {
   _id: string

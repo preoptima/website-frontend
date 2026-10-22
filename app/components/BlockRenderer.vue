@@ -5,6 +5,7 @@ import BlockCards from './blocks/BlockCards.vue'
 import BlockCta from './blocks/BlockCta.vue'
 import BlockLogos from './blocks/BlockLogos.vue'
 import BlockSplit from './blocks/BlockSplit.vue'
+import BlockSteps from './blocks/BlockSteps.vue'
 
 defineProps<{ blocks?: PageBlock[] | null }>()
 
@@ -15,6 +16,7 @@ const registry: Record<PageBlock['_type'], Component> = {
   ctaBlock: BlockCta,
   logoStripBlock: BlockLogos,
   splitBlock: BlockSplit,
+  stepsBlock: BlockSteps,
 }
 </script>
 
