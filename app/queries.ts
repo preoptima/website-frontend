@@ -3,11 +3,13 @@
 
 const isHome = /* groq */ `_id == *[_type == "siteSettings"][0].homePage._ref`
 
+const linkedPage = /* groq */ `internal->{ "slug": slug.current, "isHome": ${isHome} }`
+
 const link = /* groq */ `{
   type,
   url,
   anchor,
-  "page": internal->{ "slug": slug.current, "isHome": ${isHome} }
+  "page": ${linkedPage}
 }`
 
 const labelledLink = /* groq */ `{ _key, label, "link": link${link} }`
@@ -31,6 +33,10 @@ const pageFields = /* groq */ `
     ctas[]${cta},
     _type == "cardGridBlock" => { cards[]{ ..., "link": link${labelledLink} } },
     _type == "logoStripBlock" => { "partners": partners[]->{ _id, name, logo, url } },
+    _type == "faqBlock" => {
+      "faqs": faqs[]->{ _id, question, answer[]{ ..., markDefs[]{ ..., "page": ${linkedPage} } } },
+      "contactLink": contactLink${labelledLink}
+    },
   }
 `
 

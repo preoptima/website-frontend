@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from '@portabletext/types'
+
 // Hand-written types for the shapes returned by app/queries.ts. They mirror the
 // schema in the sibling cms repo; consider `sanity typegen` once it settles.
 
@@ -146,7 +148,23 @@ export interface StepsBlock extends BlockBase {
   steps?: { _key: string, label?: string, title: string, body?: string }[]
 }
 
-export type PageBlock = SplitBlock | CardGridBlock | StepsBlock | LogoStripBlock | CtaBlock
+export interface Faq {
+  _id: string
+  question: string
+  // Portable text; link annotations are resolved like any other `Link`.
+  answer?: PortableTextBlock[]
+}
+
+export interface FaqBlock extends BlockBase {
+  _type: 'faqBlock'
+  tone?: 'default' | 'white'
+  heading?: string
+  faqs?: (Faq | null)[]
+  contactPrompt?: string
+  contactLink?: LabelledLink
+}
+
+export type PageBlock = SplitBlock | CardGridBlock | StepsBlock | LogoStripBlock | FaqBlock | CtaBlock
 
 export interface Page {
   _id: string
