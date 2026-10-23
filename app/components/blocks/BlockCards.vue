@@ -93,6 +93,7 @@ const showMedia = (card: Card) =>
             <div
               v-if="style === 'feature' && (showMedia(card) || card.badge)"
               class="card__media"
+              :class="{ 'card__media--upcoming': card.status }"
             >
               <SanityImg
                 v-if="hasImage(card)"
@@ -326,6 +327,23 @@ const showMedia = (card: Card) =>
   object-fit: cover;
 }
 
+/* Screenshots are mostly white and grey UI, so they need a frame to stand
+   off the page and the card's tint. It's drawn over the image because the
+   image covers the whole media box. */
+.card--feature .card__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(22, 35, 42, 0.12);
+  pointer-events: none;
+}
+
+/* Products that aren't out yet show a stand-in image, so it's faded back to
+   read as a preview. */
+.card__media--upcoming img {
+  opacity: 0.5;
+}
+
 .card__media--bottom {
   aspect-ratio: 16 / 10;
   margin-top: 10px;
@@ -338,11 +356,13 @@ const showMedia = (card: Card) =>
 
 .card__badge {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  z-index: 1;
+  right: 16px;
+  bottom: 16px;
   padding: 6px 10px;
   border-radius: var(--radius-control);
-  background: var(--white);
+  background: var(--family-surface);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.35);
   color: var(--family-ground);
   font-size: 11px;
   font-weight: 700;
